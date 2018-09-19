@@ -1,0 +1,18 @@
+#!/bin/bash
+(
+set -ex
+TMP=`mktemp`
+curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install | sed '/^BREW_REPO/c\
+BREW_REPO = "https://mirrors.ustc.edu.cn/brew.git".freeze\
+' | sed '/^CORE_TAP_REPO/c\
+CORE_TAP_REPO = "https://mirrors.ustc.edu.cn/homebrew-core.git".freeze\
+' > $TMP
+/usr/bin/ruby $TMP
+rm -rf $TMP
+
+cd "$(brew --repo)"
+git remote set-url origin git://mirrors.ustc.edu.cn/brew.git
+
+cd "$(brew --repo)/Library/Taps/homebrew/homebrew-core"
+git remote set-url origin git://mirrors.ustc.edu.cn/homebrew-core.git
+)
